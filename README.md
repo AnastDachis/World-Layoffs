@@ -25,7 +25,7 @@ The final result is showcased in the "Layoffs Table Page 1.pdf." Pages 2 and 3 i
 
 ### Layoffs by country : 
 
--United States (the highest laid off numbers) :
+- United States (the highest laid off numbers) :
 In 2020, 50,385 employees in industries like transportation, retail, consumer, travel, and real estate were laid off. These numbers illustrate the severe economic challenges brought on by the pandemic. As the pandemic stretched into 2021, the layoff patterns remained consistent, with the real estate, construction, and food sectors showing the highest layoffs, while retail continued to be significantly affected.
 
 - India had significant layoffs as well, with 14,224 in 2022 and 12,932 in 2020.
