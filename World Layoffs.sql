@@ -225,37 +225,3 @@ ADD COLUMN year INT;
 # και στη συνέχεια εξάγουμε το έτος χρησιμοποιώντας τη συνάρτηση YEAR.
 UPDATE layoffs_staging2
 SET year = YEAR(STR_TO_DATE(date, '%Y-%m-%d'));
-
-# Δημιουργούμε τον πίνακα cleaned_table με τις απαραίτητες στήλες
-CREATE TABLE `cleaned_table` (
-  `company` text,
-  `location` text,
-  `industry` text,
-  `total_laid_off` int DEFAULT NULL,
-  `percentage_laid_off` bigint DEFAULT NULL,
-  `date` text,
-  `stage` text,
-  `country` text,
-  `funds_raised_millions` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-# Διαγράφουμε τον προσωρινό πίνακα αν υπάρχει
-DROP TEMPORARY TABLE IF EXISTS TempRankedCompanies;
-
-# Δημιουργούμε έναν προσωρινό πίνακα TempRankedCompanies, όπου αποθηκεύουμε τα δεδομένα με κατάταξη
-CREATE TEMPORARY TABLE TempRankedCompanies AS 
-WITH Company_Year AS 
-(
-  # Συγκεντρώνουμε τα δεδομένα απολύσεων για κάθε εταιρεία ανά έτος
-  SELECT company, location, industry, country, YEAR(date) AS years, SUM(total_laid_off) AS total_laid_off, stage, date, funds_raised_millions
-  FROM layoffs_staging2
-  GROUP BY company, location, industry, country, YEAR(date), stage, date, funds_raised_millions
-),
-Company_Year_Rank AS (
-  # Κατατάσσουμε τις εταιρείες βάσει του αριθμού απολύσεων ανά έτος
-  SELECT company, location, industry, country, years, total_laid_off, stage, date, funds_raised_millions, 
-         DENSE_RANK() OVER (PARTITION BY years ORDER BY total_laid_off DESC) AS ranking
-  FROM Company_Year
-)
-
-
